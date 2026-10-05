@@ -19,13 +19,13 @@ body {
 
 .editorial-grid {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 4rem;
 }
 
 @media (min-width: 1024px) {
     .editorial-grid {
-        grid-template-columns: 10fr 3fr;
+        grid-template-columns: minmax(0, 10fr) minmax(0, 3fr);
         align-items: start;
     }
 
@@ -219,6 +219,8 @@ pre[class*="language-"],
     border-radius: 0.75rem !important;
     padding: 1.5rem !important;
     box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2) !important;
+    overflow-x: auto !important;
+    max-width: 100%;
 }
 
 pre[class*="language-"] {
@@ -288,6 +290,8 @@ pre[class*="language-"] {
     border-radius: 0 0.5rem 0.5rem 0;
     box-shadow: inset 0 2px 4px 0 rgba(37, 99, 235, 0.05);
     transition: background-color 0.3s, color 0.3s;
+    overflow-x: auto;
+    max-width: 100%;
 }
 
 .dark .formula-box {
