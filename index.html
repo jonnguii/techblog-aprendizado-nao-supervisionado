@@ -392,7 +392,7 @@
                     <i data-lucide="moon" class="w-5 h-5 dark:hidden"></i>
                     <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
                 </button>
-                <a href="https://github.com" target="_blank"
+                <a href="https://github.com/jonnguii/techblog-aprendizado-nao-supervisionado" target="_blank" aria-label="Repositório no GitHub"
                     class="text-brand-400 hover:text-brand-700 dark:text-ink-400 dark:hover:text-brand-300 transition-colors bg-brand-50 dark:bg-ink-900 p-2 rounded-full">
                     <svg viewBox="0 0 24 24" class="w-5 h-5 fill-current" aria-hidden="true">
                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -499,7 +499,7 @@
                     <h2>Estrutura no Caos</h2>
                     <p>
                         Neste cenário, utilizamos o <strong>Aprendizado de Máquina Não Supervisionado</strong>
-                        (<em>Unsupervised Learning</em>). Ele caracteriza-se pela exploração autônoma de distribuições
+                        (<em>Unsupervised Learning</em>)<a href="#ref-1" class="text-brand-600 dark:text-brand-400 font-mono text-xs align-super hover:underline">[1]</a>. Ele caracteriza-se pela exploração autônoma de distribuições
                         de dados não rotulados. Nós não avaliamos e não otimizamos o modelo em relação a um gabarito de
                         resposta humana; em vez disso, programamos o algoritmo para otimizar métricas puras de
                         similaridade ou dispersão interna.
@@ -560,7 +560,7 @@
                         <figcaption
                             class="mt-4 text-sm text-ink-600 dark:text-ink-400 border-l-[3px] border-brand-300 dark:border-brand-700 pl-4 font-serif italic transition-colors">
                             <strong>Figura 1.</strong> Interaja com a simulação: os pontos (observações) distribuídos
-                            aleatoriamente convergem iterativamente para seus respectivos centroides.
+                            aleatoriamente convergem iterativamente para seus respectivos centroides <a href="#ref-2" class="text-brand-600 dark:text-brand-400 font-mono text-xs align-super hover:underline">[2]</a>.
                         </figcaption>
                     </figure>
                 </section>
@@ -569,7 +569,7 @@
                     <h2>A Matemática do K-Means</h2>
                     <p>
                         Para resolvermos nosso problema, vamos usar o modelo mais representativo de particionamento: o
-                        algoritmo <strong>K-Means</strong>. Sua heurística baseia-se na realocação iterativa com o foco
+                        algoritmo <strong>K-Means</strong><a href="#ref-1" class="text-brand-600 dark:text-brand-400 font-mono text-xs align-super hover:underline">[1]</a>. Sua heurística baseia-se na realocação iterativa com o foco
                         exclusivo de minimizar a variância intra-cluster (a Inércia).
                     </p>
                     <p>Vamos estruturar nosso ciclo computacional em quatro etapas determinísticas:</p>
@@ -602,7 +602,7 @@
                     <h2>Implementação Python</h2>
                     <p>
                         Na prática, podemos validar nossos dados e treinar o modelo rapidamente utilizando a biblioteca
-                        <code>scikit-learn</code> no Python. O fluxo de código abaixo simula a extração matemática para
+                        <code>scikit-learn</code><a href="#ref-1" class="text-brand-600 dark:text-brand-400 font-mono text-xs align-super hover:underline">[1]</a> no Python. O fluxo de código abaixo simula a extração matemática para
                         criarmos nossas 4 campanhas de marketing diferentes.
                     </p>
 
@@ -628,6 +628,16 @@ plt.scatter(X[:, 0], X[:, 1], c=perfis_identificados, cmap='viridis', alpha=0.6)
 plt.scatter(centroides[:, 0], centroides[:, 1], c='black', marker='x', s=100)
 plt.title("Perfis de Clientes via K-Means")
 plt.show()</code></pre>
+
+                    <!-- PREENCHER: versões das bibliotecas e link do notebook -->
+                    <div class="formula-box !justify-start !items-start !flex-col !text-base !gap-2">
+                        <span class="font-bold">Ambiente de execução</span>
+                        <span>Python <strong>3.14.8</strong></span>
+                        <span>scikit-learn <strong>1.9.1</strong></span>
+                        <span>matplotlib <strong>3.11.2</strong></span>
+                        <a href="LINK-DO-NOTEBOOK-AQUI" target="_blank"
+                            class="text-brand-700 dark:text-brand-300 font-bold underline underline-offset-4 hover:text-brand-900 dark:hover:text-brand-100">Abrir notebook completo (Colab/Jupyter)</a>
+                    </div>
                 </section>
 
                 <section>
@@ -635,7 +645,7 @@ plt.show()</code></pre>
                     <p>
                         Devemos ter muito cuidado: a ausência de um gabarito exige extremo rigor na fase de
                         pré-processamento. O modelo absorverá ruído se não definirmos limites claros. Duas armadilhas
-                        são clássicas:
+                        são clássicas <a href="#ref-3" class="text-brand-600 dark:text-brand-400 font-mono text-xs align-super hover:underline">[3]</a>:
                     </p>
 
                     <h3>A Determinação da Dimensionalidade (K)</h3>
@@ -669,8 +679,8 @@ plt.show()</code></pre>
                             <i data-lucide="link"
                                 class="w-5 h-5 text-brand-400 dark:text-brand-500 flex-shrink-0 mt-0.5"></i>
                             <div>
-                                <a href="https://scikit-learn.org/stable/modules/clustering.html" target="_blank"
-                                    class="text-brand-700 dark:text-brand-400 font-bold hover:text-brand-900 dark:hover:text-brand-200 hover:underline underline-offset-4 block mb-1">Guia
+                                <a id="ref-1" href="https://scikit-learn.org/stable/modules/clustering.html" target="_blank"
+                                    class="text-brand-700 dark:text-brand-400 font-bold hover:text-brand-900 dark:hover:text-brand-200 hover:underline underline-offset-4 block mb-1"><span class="font-mono">[1]</span> Guia
                                     Oficial do Scikit-Learn: Clustering Algorithms</a>
                                 <span class="text-ink-600 dark:text-ink-400">A documentação técnica primária. Explica
                                     detalhadamente como o K-Means e outros algoritmos funcionam sob o capô da principal
@@ -681,8 +691,8 @@ plt.show()</code></pre>
                             <i data-lucide="link"
                                 class="w-5 h-5 text-brand-400 dark:text-brand-500 flex-shrink-0 mt-0.5"></i>
                             <div>
-                                <a href="https://mlu-explain.github.io/" target="_blank"
-                                    class="text-brand-700 dark:text-brand-400 font-bold hover:text-brand-900 dark:hover:text-brand-200 hover:underline underline-offset-4 block mb-1">Machine
+                                <a id="ref-2" href="https://mlu-explain.github.io/" target="_blank"
+                                    class="text-brand-700 dark:text-brand-400 font-bold hover:text-brand-900 dark:hover:text-brand-200 hover:underline underline-offset-4 block mb-1"><span class="font-mono">[2]</span> Machine
                                     Learning University: Visual Explanations</a>
                                 <span class="text-ink-600 dark:text-ink-400">Uma excelente referência interativa com
                                     artigos visuais patrocinados que facilitam a construção da intuição matemática para
@@ -693,8 +703,8 @@ plt.show()</code></pre>
                             <i data-lucide="link"
                                 class="w-5 h-5 text-brand-400 dark:text-brand-500 flex-shrink-0 mt-0.5"></i>
                             <div>
-                                <a href="https://developers.google.com/machine-learning/crash-course" target="_blank"
-                                    class="text-brand-700 dark:text-brand-400 font-bold hover:text-brand-900 dark:hover:text-brand-200 hover:underline underline-offset-4 block mb-1">Google
+                                <a id="ref-3" href="https://developers.google.com/machine-learning/crash-course" target="_blank"
+                                    class="text-brand-700 dark:text-brand-400 font-bold hover:text-brand-900 dark:hover:text-brand-200 hover:underline underline-offset-4 block mb-1"><span class="font-mono">[3]</span> Google
                                     Machine Learning Crash Course</a>
                                 <span class="text-ink-600 dark:text-ink-400">Curso intensivo gratuito fornecido pelos
                                     engenheiros do Google. Ideal para preencher eventuais defasagens em álgebra ou
@@ -725,6 +735,62 @@ plt.show()</code></pre>
                 </nav>
             </aside>
         </div>
+        <section id="autores" class="mt-20">
+                    <h2 class="font-serif text-3xl font-bold text-brand-900 dark:text-brand-100 mb-8">Sobre os Autores</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white dark:bg-ink-900/50 border border-brand-100 dark:border-ink-800 rounded-xl p-6 shadow-sm transition-colors duration-300">
+                        <div class="flex items-center gap-4 mb-4">
+                            <img src="https://github.com/jeanBR2O2O.png" alt="Foto de Jean Carlos"
+                                class="w-16 h-16 rounded-full object-cover border-2 border-brand-100 dark:border-brand-800"
+                                onerror="this.src='https://placehold.co/150x150/eff6ff/1e3a8a?text=JC'">
+                            <div>
+                                <h3 class="!m-0 !text-base font-bold text-brand-900 dark:text-brand-100 !normal-case">Jean Carlos</h3>
+                                <p class="!m-0 !text-sm text-ink-600 dark:text-ink-400 font-sans">Sistemas de Informação · 8º semestre</p>
+                            </div>
+                        </div>
+                        <!-- PREENCHER: interesses de Jean Carlos -->
+                        <p class="!text-sm !mb-4 text-ink-700 dark:text-ink-300"><strong>Interesses:</strong> Segurança de Dados</p>
+                        <div class="flex gap-4 text-sm font-bold">
+                            <a href="LINK-LINKEDIN-JC-AQUI" target="_blank" class="text-brand-700 dark:text-brand-400 hover:underline underline-offset-4">LinkedIn</a>
+                            <a href="https://github.com/jeanBR2O2O" target="_blank" class="text-brand-700 dark:text-brand-400 hover:underline underline-offset-4">GitHub</a>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-ink-900/50 border border-brand-100 dark:border-ink-800 rounded-xl p-6 shadow-sm transition-colors duration-300">
+                        <div class="flex items-center gap-4 mb-4">
+                            <img src="https://github.com/jonnguii.png" alt="Foto de João Guilherme"
+                                class="w-16 h-16 rounded-full object-cover border-2 border-brand-100 dark:border-brand-800"
+                                onerror="this.src='https://placehold.co/150x150/eff6ff/1e3a8a?text=JG'">
+                            <div>
+                                <h3 class="!m-0 !text-base font-bold text-brand-900 dark:text-brand-100 !normal-case">João Guilherme</h3>
+                                <p class="!m-0 !text-sm text-ink-600 dark:text-ink-400 font-sans">Sistemas de Informação · 7º semestre</p>
+                            </div>
+                        </div>
+                        <!-- PREENCHER: interesses de João Guilherme -->
+                        <p class="!text-sm !mb-4 text-ink-700 dark:text-ink-300"><strong>Interesses:</strong> Desenvolvimento e Arquitetura de Software</p>
+                        <div class="flex gap-4 text-sm font-bold">
+                            <a href="https://www.linkedin.com/in/jcravog/" target="_blank" class="text-brand-700 dark:text-brand-400 hover:underline underline-offset-4">LinkedIn</a>
+                            <a href="https://github.com/jonnguii" target="_blank" class="text-brand-700 dark:text-brand-400 hover:underline underline-offset-4">GitHub</a>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-ink-900/50 border border-brand-100 dark:border-ink-800 rounded-xl p-6 shadow-sm transition-colors duration-300">
+                        <div class="flex items-center gap-4 mb-4">
+                            <img src="https://github.com/SAMUKISZHSD.png" alt="Foto de Samuel"
+                                class="w-16 h-16 rounded-full object-cover border-2 border-brand-100 dark:border-brand-800"
+                                onerror="this.src='https://placehold.co/150x150/eff6ff/1e3a8a?text=S'">
+                            <div>
+                                <h3 class="!m-0 !text-base font-bold text-brand-900 dark:text-brand-100 !normal-case">Samuel Allan</h3>
+                                <p class="!m-0 !text-sm text-ink-600 dark:text-ink-400 font-sans">Sistemas de Informação · 8º semestre</p>
+                            </div>
+                        </div>
+                        <!-- PREENCHER: interesses de Samuel -->
+                        <p class="!text-sm !mb-4 text-ink-700 dark:text-ink-300"><strong>Interesses:</strong> Engenharia de Dados</p>
+                        <div class="flex gap-4 text-sm font-bold">
+                            <a href="https://www.linkedin.com/in/samuel-allan-nunes-cunha/" target="_blank" class="text-brand-700 dark:text-brand-400 hover:underline underline-offset-4">LinkedIn</a>
+                            <a href="https://github.com/SAMUKISZHSD" target="_blank" class="text-brand-700 dark:text-brand-400 hover:underline underline-offset-4">GitHub</a>
+                        </div>
+                    </div>
+                    </div>
+                </section>
     </main>
 
     <footer class="bg-brand-950 text-brand-200 py-12 font-sans text-sm mt-20">
@@ -739,10 +805,11 @@ plt.show()</code></pre>
             </div>
 
             <div class="flex flex-col items-start md:items-end gap-2">
-                <a href="#" class="text-white hover:text-brand-400 font-bold transition-colors flex items-center gap-2">
+                <a href="https://github.com/jonnguii/techblog-aprendizado-nao-supervisionado" target="_blank" class="text-white hover:text-brand-400 font-bold transition-colors flex items-center gap-2">
                     <i data-lucide="github" class="w-4 h-4"></i>
                     Acessar Repositório
                 </a>
+                <p>Última revisão: <time datetime="2026-10-04">04/10/2026</time></p>
                 <p>&copy; 2026 TechBlog. Licença MIT.</p>
             </div>
         </div>
