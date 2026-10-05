@@ -208,16 +208,21 @@ body {
 }
 
 /* Custom Prism Theme Override */
-pre[class*="language-"] {
+pre[class*="language-"],
+.exec-env-box {
     background: #172554 !important;
     border: 1px solid #1e3a8a !important;
     border-radius: 0.75rem !important;
-    margin: 2.5rem 0 !important;
     padding: 1.5rem !important;
     box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2) !important;
 }
 
-.dark pre[class*="language-"] {
+pre[class*="language-"] {
+    margin: 2.5rem 0 !important;
+}
+
+.dark pre[class*="language-"],
+.dark .exec-env-box {
     background: #000000 !important;
     border-color: #172554 !important;
 }
