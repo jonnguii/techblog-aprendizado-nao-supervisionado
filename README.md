@@ -10,14 +10,13 @@ Projeto de blog técnico sobre aprendizado não supervisionado, com foco no algo
 
 ## Site publicado
 
-- https://techblog-aprendizado-nao-supervisionio.vercel.app/
-
+- https://techblog-aprendizado-nao-supervision.vercel.app/
 
 ## Visão geral
 
 Este projeto foi desenvolvido a partir da ideia de transformar um notebook de apresentação em uma página web técnica, didática e visualmente clara. O objetivo era traduzir conceitos de machine learning para uma linguagem acessível, com uma narrativa em formato de blog e uma identidade visual moderna.
 
-A referência principal do conteúdo foi o notebook `apresentacao_kmeans_final.ipynb`, que contém a explanação sobre K-Means, o método do cotovelo e a importância da padronização dos dados antes do treinamento.
+A referência principal do conteúdo foi o notebook disponível no Google Colab: https://colab.research.google.com/drive/102DnVdYTYplMjCnGtnQb_3Q4ahCk6kYX?usp=sharing. Ele contém a explanação sobre K-Means, o método do cotovelo e a importância da padronização dos dados antes do treinamento.
 
 ## Quadro de Observação
 
@@ -67,7 +66,6 @@ http://localhost:8000/
 │   └── tailwind.min.css
 ├── img/
 │   └── ai-svgrepo-com.svg
-├── apresentacao_kmeans_final.ipynb
 ├── README.md
 ├── LICENSE
 └── tailwind.config.js
