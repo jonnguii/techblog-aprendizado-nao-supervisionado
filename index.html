@@ -65,7 +65,8 @@
                     <i data-lucide="moon" class="w-5 h-5 dark:hidden"></i>
                     <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
                 </button>
-                <a href="https://github.com/jonnguii/techblog-aprendizado-nao-supervisionado" target="_blank" aria-label="Repositório no GitHub"
+                <a href="https://github.com/jonnguii/techblog-aprendizado-nao-supervisionado" target="_blank"
+                    aria-label="Repositório no GitHub"
                     class="text-brand-400 hover:text-brand-700 dark:text-ink-400 dark:hover:text-brand-300 transition-colors bg-brand-50 dark:bg-ink-900 p-2 rounded-full">
                     <svg viewBox="0 0 24 24" class="w-5 h-5 fill-current" aria-hidden="true">
                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -338,7 +339,8 @@ plt.show()</code></pre>
                                 style="color: #ffffff;">1.9.1</strong></span>
                         <span class="font-mono text-sm" style="color: #93c5fd;">matplotlib <strong
                                 style="color: #ffffff;">3.11.2</strong></span>
-                        <a href="https://colab.research.google.com/drive/102DnVdYTYplMjCnGtnQb_3Q4ahCk6kYX?usp=sharing" target="_blank"
+                        <a href="https://colab.research.google.com/drive/102DnVdYTYplMjCnGtnQb_3Q4ahCk6kYX?usp=sharing"
+                            target="_blank"
                             class="font-bold underline underline-offset-4 mt-3 transition-colors flex items-center gap-1"
                             style="color: #60a5fa;">
                             <i data-lucide="external-link" class="w-4 h-4"></i>
@@ -355,24 +357,31 @@ plt.show()</code></pre>
                         são clássicas:
                     </p>
 
-                    <h3>A Determinação da Dimensionalidade (K)</h3>
+                    <h3>A Determinação da Dimensionalidade (A Escolha da Quantidade de Grupos, o K)</h3>
                     <p>
-                        No algoritmo puro, precisamos definir o parâmetro escalar <em>K</em> a priori. Se errarmos, e
+                        No algoritmo, precisamos definir o número de grupos (um
+                        valor que chamamos de <em>K</em>) antes mesmo de iniciar o processo. Se errarmos, e
                         definirmos <span
                             class="font-mono bg-brand-50 dark:bg-brand-950 px-1 text-brand-700 dark:text-brand-300 rounded text-sm">K=10</span>
-                        para clientes que naturalmente só se dividem em dois grupos, o algoritmo forçará cortes irreais
-                        e matemáticos em agrupamentos que não possuem nenhum significado de negócios. Para mitigar,
-                        costumamos aplicar o Método do Cotovelo (<em>Elbow Method</em>), uma técnica gráfica que testa
-                        vários valores de K até encontrar o ponto de equilíbrio.
+                        para clientes que naturalmente só se dividem em dois grupos, o algoritmo vai forçar divisões
+                        irreais
+                        que não possuem nenhum significado para os negócios. Para evitar isso,
+                        costumamos aplicar o Método do Cotovelo (uma técnica em formato de gráfico que testa
+                        vários valores de K até encontrar a quantidade ideal).
                     </p>
 
-                    <h3>Sensibilidade à Escala</h3>
+                    <h3>Sensibilidade à Escala (Lidando com Tamanhos Diferentes de Números)</h3>
                     <p>
-                        Nossa dependência matemática da distância geométrica torna o modelo cego perante escalas. Se
-                        usarmos a variável <em>Idade</em> (20 a 80) em conjunto com o <em>Gasto Mensal</em> (de 1.000 a
-                        50.000), a matemática do modelo fará a distância da renda dominar todo o processo. Precisamos
-                        obrigatoriamente padronizar a escala de nossos dados numéricos através de
-                        <code>StandardScaler</code> antes do treinamento.
+                        Como a máquina se baseia no cálculo de distância geométrica (como se estivesse medindo o espaço
+                        entre dois pontos com uma régua), ela pode se confundir com números de tamanhos muito
+                        diferentes. Se
+                        usarmos a informação de <em>Idade</em> (que vai de 20 a 80) em conjunto com o <em>Gasto
+                            Mensal</em> (que vai de 1.000 a
+                        50.000), os números maiores do gasto vão dominar todo o cálculo. Por isso, precisamos
+                        obrigatoriamente padronizar a escala (colocar todos os dados em uma proporção parecida, usando
+                        comandos como o
+                        <code>StandardScaler</code>) antes do treinamento (fase em que a ferramenta aprende com os
+                        dados).
                     </p>
                 </section>
 
@@ -575,7 +584,7 @@ plt.show()</code></pre>
                     <h2 class="text-white font-bold tracking-wider uppercase text-xs mb-1">Informações</h2>
                     <div class="flex items-center gap-2 text-brand-300 hover:text-white transition-colors">
                         <i data-lucide="calendar-check" class="w-4 h-4"></i>
-                        <span>Última revisão: 04 de Out. de 2026</span>
+                        <span>Última revisão: 05 de Out. de 2026</span>
                     </div>
                     <a href="https://github.com/jonnguii/techblog-aprendizado-nao-supervisionado/issues" target="_blank"
                         class="flex items-center gap-2 text-brand-300 hover:text-white transition-colors">
