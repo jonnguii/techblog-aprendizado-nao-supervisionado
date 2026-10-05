@@ -8,11 +8,7 @@
     <meta name="description"
         content="A descoberta de estrutura em dados sem rótulos. Uma abordagem analítica sobre agrupamentos e o algoritmo K-Means.">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Libre+Bodoni:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap"
-        rel="stylesheet">
+    <!-- Removed Google Fonts -->
 
     <script>
         // Set dark mode early to avoid flash
@@ -40,9 +36,9 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Public Sans', 'sans-serif'],
-                        serif: ['Libre Bodoni', 'serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
+                        sans: ['Verdana', 'sans-serif'],
+                        serif: ['Verdana', 'sans-serif'],
+                        mono: ['Verdana', 'sans-serif'],
                     },
                     colors: {
                         ink: {
@@ -112,7 +108,7 @@
         }
 
         .drop-cap::first-letter {
-            font-family: 'Libre Bodoni', serif;
+            font-family: 'Verdana', sans-serif;
             font-size: 4.2rem;
             line-height: 0.8;
             float: left;
@@ -138,7 +134,7 @@
         }
 
         .article-content h2 {
-            font-family: 'Libre Bodoni', serif;
+            font-family: 'Verdana', sans-serif;
             font-size: 2.25rem;
             font-weight: 700;
             margin-top: 3.5rem;
@@ -155,7 +151,7 @@
         }
 
         .article-content h3 {
-            font-family: 'Public Sans', sans-serif;
+            font-family: 'Verdana', sans-serif;
             font-size: 1.15rem;
             font-weight: 700;
             margin-top: 2.5rem;
@@ -218,7 +214,7 @@
             position: absolute;
             left: 0;
             color: #2563eb;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: 'Verdana', sans-serif;
             font-weight: 700;
             font-size: 0.95rem;
             top: 0.15rem;
@@ -304,7 +300,7 @@
 
         code[class*="language-"],
         pre[class*="language-"] {
-            font-family: 'JetBrains Mono', monospace !important;
+            font-family: 'Verdana', sans-serif !important;
             font-size: 0.9rem !important;
             line-height: 1.6 !important;
             color: #e0e7ff !important;
@@ -338,13 +334,18 @@
             color: #fbbf24 !important;
         }
 
+        .token.operator {
+            background: transparent !important;
+            color: #94a3b8 !important;
+        }
+
         /* Formula Box */
         .formula-box {
             border-left: 4px solid #2563eb;
             padding: 1.5rem;
             background: #eff6ff;
             margin: 2rem 0;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: 'Verdana', sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -382,7 +383,8 @@
                 class="hidden md:flex gap-8 text-sm font-sans font-bold text-brand-900 dark:text-brand-200 uppercase tracking-wider text-xs">
                 <a href="#problema" class="hover:text-brand-500 dark:hover:text-brand-400 transition-colors">O
                     Problema</a>
-                <a href="#conceito" class="hover:text-brand-500 dark:hover:text-brand-400 transition-colors">K-Means</a>
+                <a href="#conceito"
+                    class="hover:text-brand-500 dark:hover:text-brand-400 transition-colors">Algoritmo</a>
                 <a href="#pratica" class="hover:text-brand-500 dark:hover:text-brand-400 transition-colors">Prática</a>
             </nav>
             <div class="flex items-center gap-4">
@@ -483,7 +485,8 @@
                         Imagine que recebemos um banco de dados com o histórico de navegação de 100.000 usuários ativos
                         de um e-commerce. Nosso objetivo é construir e lançar campanhas de marketing ultra
                         personalizadas. Existe, porém, um problema crítico: não temos metadados ou rótulos informando
-                        quem é o cliente "Frequente", "Casual" ou "Em Churn". O que temos em mãos é apenas o rastro
+                        quem é o cliente "Frequente", "Casual" ou "Em Risco/Afastado". O que temos em mãos é apenas o
+                        rastro
                         digital bruto - cliques, valores de compras, e o tempo gasto em cada página.
                     </p>
                     <p>
@@ -501,8 +504,8 @@
                         Neste cenário, utilizamos o <strong>Aprendizado de Máquina Não Supervisionado</strong>
                         (<em>Unsupervised Learning</em>)<a href="#ref-1" class="text-brand-600 dark:text-brand-400 font-mono text-xs align-super hover:underline">[1]</a>. Ele caracteriza-se pela exploração autônoma de distribuições
                         de dados não rotulados. Nós não avaliamos e não otimizamos o modelo em relação a um gabarito de
-                        resposta humana; em vez disso, programamos o algoritmo para otimizar métricas puras de
-                        similaridade ou dispersão interna.
+                        resposta humana! Em vez disso, programamos o algoritmo para otimizar métricas puras de
+                        similaridade.
                     </p>
 
                     <h3>Aplicações Fundamentais</h3>
