@@ -10,7 +10,8 @@ Projeto de blog técnico sobre aprendizado não supervisionado, com foco no algo
 
 ## Site publicado
 
-- https://techblog-aprendizado-nao-supervision.vercel.app/
+- https://techblog-aprendizado-nao-supervisionio.vercel.app/
+
 
 ## Visão geral
 
