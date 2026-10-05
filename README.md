@@ -12,9 +12,6 @@ Projeto de blog técnico sobre aprendizado não supervisionado, com foco no algo
 
 - https://techblog-aprendizado-nao-supervisionio.vercel.app/
 
-## Repositório
-
-- https://github.com/jonnguii/techblog-aprendizado-nao-supervisionado
 
 ## Visão geral
 
