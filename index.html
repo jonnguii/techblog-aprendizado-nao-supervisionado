@@ -228,16 +228,19 @@
                         similaridade.
                     </p>
 
-                    <h3>Aplicações Fundamentais</h3>
+                    <h3>Como isso nos ajuda na prática? (Aplicações)</h3>
                     <ul>
-                        <li><strong>Agrupamento (Clustering):</strong> Vamos segmentar nossa base de clientes, agrupar
-                            categorias de documentos automaticamente ou até mesmo mapear anomalias genéticas.</li>
-                        <li><strong>Redução de Dimensionalidade:</strong> Vamos comprimir atributos complexos
-                            preservando a variação dos dados (ex: PCA), essencial se quisermos transformar 100 variáveis
-                            numéricas complexas em apenas duas para visualizar em um gráfico.</li>
-                        <li><strong>Detecção de Anomalias:</strong> Protegeremos sistemas contra fraudes financeiras ao
-                            treinar o modelo para detectar transações financeiras que orbitam longe de qualquer núcleo
-                            confiável.</li>
+                        <li><strong>Agrupamento (Clustering):</strong> É o que usaremos no nosso e-commerce! O modelo
+                            vai analisar a montanha de dados brutos e fatiar os usuários em "clusters" (grupos) que
+                            possuem comportamentos de compra semelhantes, permitindo campanhas de marketing ultra
+                            direcionadas.</li>
+                        <li><strong>Detecção de Anomalias:</strong> Como o modelo mapeia o que é um comportamento
+                            "normal", ele consegue identificar imediatamente pontos que fogem do padrão (como compras
+                            com valores atípicos de madrugada), protegendo o sistema contra fraudes bancárias.</li>
+                        <li><strong>Redução de Dimensionalidade:</strong> Se cada cliente tem 100 métricas diferentes, o
+                            algoritmo consegue comprimir essa complexidade em apenas 2 ou 3 variáveis principais,
+                            preservando a essência da informação para que possamos desenhar gráficos visuais que o
+                            cérebro humano consiga entender.</li>
                     </ul>
 
                     <!-- Data Viz Simulation -->
@@ -331,14 +334,19 @@
                 </section>
 
                 <section id="exemplo-pratico">
-                    <h2>Exemplo Prático</h2>
+                    <h2>Exemplo Prático (Simulando o E-commerce)</h2>
                     <p>
-                        Na prática, podemos validar nossos dados e treinar o modelo rapidamente utilizando a biblioteca
+                        Na prática real de um cientista de dados, o processo flui através de bibliotecas como o
                         <code>scikit-learn</code><sup><a href="#ref-1"
                                 class="text-brand-600 dark:text-brand-400 font-bold hover:underline"
-                                title="Ver referência: Scikit-Learn">[1]</a></sup> no Python. O fluxo de código abaixo
-                        simula a extração matemática para
-                        criarmos nossas 4 campanhas de marketing diferentes.
+                                title="Ver referência: Scikit-Learn">[1]</a></sup> no Python.
+                    </p>
+                    <p>
+                        Para facilitar o nosso entendimento, o fluxo de código abaixo <strong>simula</strong> uma base
+                        reduzida de 300 clientes (usando a função <code>make_blobs</code>) em vez de 100 mil. Se você
+                        executar esse exato script no seu computador, ele não só dividirá os clientes matematicamente em
+                        4 campanhas de marketing diferentes, como <strong>abrirá uma janela plotando um gráfico
+                            colorido</strong> mostrando exatamente onde cada perfil de cliente está!
                     </p>
 
                     <pre><code class="language-python">import matplotlib.pyplot as plt
@@ -370,9 +378,12 @@ plt.show()</code></pre>
                             <i data-lucide="box" class="w-5 h-5" style="color: #60a5fa;"></i>
                             <span class="font-bold" style="color: #ffffff;">Dependências e Ambiente (Notebook)</span>
                         </div>
-                        <span class="font-mono text-sm" style="color: #93c5fd;">Python <strong style="color: #ffffff;">3.14.8</strong></span>
-                        <span class="font-mono text-sm" style="color: #93c5fd;">scikit-learn <strong style="color: #ffffff;">1.9.1</strong></span>
-                        <span class="font-mono text-sm" style="color: #93c5fd;">matplotlib <strong style="color: #ffffff;">3.11.2</strong></span>
+                        <span class="font-mono text-sm" style="color: #93c5fd;">Python <strong
+                                style="color: #ffffff;">3.14.8</strong></span>
+                        <span class="font-mono text-sm" style="color: #93c5fd;">scikit-learn <strong
+                                style="color: #ffffff;">1.9.1</strong></span>
+                        <span class="font-mono text-sm" style="color: #93c5fd;">matplotlib <strong
+                                style="color: #ffffff;">3.11.2</strong></span>
                         <a href="LINK-DO-NOTEBOOK-AQUI" target="_blank"
                             class="font-bold underline underline-offset-4 mt-3 transition-colors flex items-center gap-1"
                             style="color: #60a5fa;">
