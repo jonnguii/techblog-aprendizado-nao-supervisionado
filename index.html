@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprendizado Não Supervisionado - TechBlog</title>
+    <meta name="description" content="A descoberta de estrutura em dados sem rótulos. Uma abordagem analítica sobre agrupamentos e o algoritmo K-Means.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Bodoni:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        // Set dark mode early to avoid flash
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- PrismJS for Code Highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Public Sans', 'sans-serif'],
+                        serif: ['Libre Bodoni', 'serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        ink: {
+                            50: '#f8f9fa',
+                            100: '#f1f3f5',
+                            200: '#e9ecef',
+                            300: '#dee2e6',
+                            400: '#ced4da',
+                            500: '#adb5bd',
+                            600: '#868e96',
+                            700: '#495057',
+                            800: '#343a40',
+                            900: '#212529',
+                            950: '#09090b', /* Zinc 950 for true dark */
+                        },
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                            950: '#172554',
+                        }
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #fafafa;
+            color: #18181b;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .dark body {
+            background-color: #09090b;
+            color: #f8f9fa;
+        }
+
+        .editorial-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 4rem;
+        }
+
+        @media (min-width: 1024px) {
+            .editorial-grid {
+                grid-template-columns: 10fr 3fr;
+                align-items: start;
+            }
+            .sidebar {
+                position: sticky;
+                top: 6rem;
+            }
+        }
+
+        .drop-cap::first-letter {
+            font-family: 'Libre Bodoni', serif;
+            font-size: 4.2rem;
+            line-height: 0.8;
+            float: left;
+            margin-right: 0.75rem;
+            margin-top: 0.35rem;
+            color: #2563eb;
+            font-weight: 700;
+        }
+        .dark .drop-cap::first-letter {
+            color: #60a5fa;
+        }
+
+        .article-content p {
+            margin-bottom: 1.75rem;
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: #343a40;
+        }
+        .dark .article-content p {
+            color: #ced4da;
+        }
+
+        .article-content h2 {
+            font-family: 'Libre Bodoni', serif;
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-top: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: #1e3a8a;
+            letter-spacing: -0.01em;
+            border-bottom: 3px solid #eff6ff;
+            padding-bottom: 0.5rem;
+        }
+        .dark .article-content h2 {
+            color: #bfdbfe;
+            border-bottom-color: #1e3a8a;
+        }
+
+        .article-content h3 {
+            font-family: 'Public Sans', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            color: #1d4ed8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .dark .article-content h3 {
+            color: #93c5fd;
+        }
+
+        .article-content ul, .article-content ol {
+            padding-left: 0;
+            margin-bottom: 2rem;
+        }
+
+        .article-content ul li {
+            position: relative;
+            padding-left: 1.75rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.125rem;
+            color: #343a40;
+            line-height: 1.7;
+        }
+        .dark .article-content ul li {
+            color: #ced4da;
+        }
+
+        .article-content ul li::before {
+            content: '-';
+            position: absolute;
+            left: 0;
+            color: #60a5fa;
+            font-weight: bold;
+        }
+
+        .article-content ol {
+            counter-reset: item;
+        }
+
+        .article-content ol li {
+            position: relative;
+            padding-left: 2.25rem;
+            margin-bottom: 1rem;
+            font-size: 1.125rem;
+            color: #343a40;
+        }
+        .dark .article-content ol li {
+            color: #ced4da;
+        }
+
+        .article-content ol li::before {
+            content: counter(item) ". ";
+            counter-increment: item;
+            position: absolute;
+            left: 0;
+            color: #2563eb;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 0.95rem;
+            top: 0.15rem;
+        }
+        .dark .article-content ol li::before {
+            color: #60a5fa;
+        }
+
+        .article-content strong {
+            color: #1e3a8a;
+            font-weight: 600;
+        }
+        .dark .article-content strong {
+            color: #bfdbfe;
+        }
+
+        /* Reading Progress */
+        #progress-bar {
+            transform-origin: 0% 50%;
+            transition: transform 0.1s linear;
+        }
+
+        /* SVG Visualization */
+        .viz-container {
+            border: 1px solid #dbeafe;
+            background: #ffffff;
+            position: relative;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.05), 0 4px 6px -2px rgba(37, 99, 235, 0.025);
+            overflow: hidden;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .dark .viz-container {
+            border-color: #1e3a8a;
+            background: #09090b;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+        }
+
+        .viz-header {
+            background-color: #eff6ff;
+            border-bottom: 1px solid #dbeafe;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .dark .viz-header {
+            background-color: #172554;
+            border-bottom-color: #1e3a8a;
+        }
+
+        .viz-grid line {
+            stroke: #f1f3f5;
+            stroke-width: 1;
+            transition: stroke 0.3s;
+        }
+        .dark .viz-grid line {
+            stroke: #27272a;
+        }
+
+        .cluster-dot {
+            transition: cx 1.2s cubic-bezier(0.22, 1, 0.36, 1), 
+                        cy 1.2s cubic-bezier(0.22, 1, 0.36, 1), 
+                        fill 0.5s ease-out;
+        }
+
+        /* Custom Prism Theme Override */
+        pre[class*="language-"] {
+            background: #172554 !important;
+            border: 1px solid #1e3a8a !important;
+            border-radius: 0.75rem !important;
+            margin: 2.5rem 0 !important;
+            padding: 1.5rem !important;
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2) !important;
+        }
+        .dark pre[class*="language-"] {
+            background: #000000 !important;
+            border-color: #172554 !important;
+        }
+
+        code[class*="language-"], pre[class*="language-"] {
+            font-family: 'JetBrains Mono', monospace !important;
+            font-size: 0.9rem !important;
+            line-height: 1.6 !important;
+            color: #e0e7ff !important;
+            text-shadow: none !important;
+        }
+
+        .token.comment { color: #93c5fd !important; font-style: italic; }
+        .token.keyword { color: #60a5fa !important; font-weight: 600 !important; }
+        .token.string { color: #34d399 !important; }
+        .token.function { color: #c084fc !important; font-weight: bold !important;}
+        .token.number { color: #f472b6 !important; }
+        .token.class-name { color: #fbbf24 !important; }
+
+        /* Formula Box */
+        .formula-box {
+            border-left: 4px solid #2563eb;
+            padding: 1.5rem;
+            background: #eff6ff;
+            margin: 2rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #1e3a8a;
+            border-radius: 0 0.5rem 0.5rem 0;
+            box-shadow: inset 0 2px 4px 0 rgba(37, 99, 235, 0.05);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .dark .formula-box {
+            background: #172554;
+            color: #bfdbfe;
+            border-left-color: #60a5fa;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="sticky top-0 w-full bg-white/95 dark:bg-ink-950/95 backdrop-blur z-50 border-b border-brand-100 dark:border-ink-900 shadow-sm transition-colors duration-300" id="header">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="font-serif font-bold text-xl text-brand-900 dark:text-brand-100 tracking-wide flex items-center gap-2">
+                <div class="w-8 h-8 rounded bg-brand-600 dark:bg-brand-500 flex items-center justify-center text-white">
+                    <i data-lucide="layers" class="w-5 h-5"></i>
+                </div>
+                <span>TECH<span class="font-normal text-brand-400 dark:text-brand-300">BLOG</span></span>
+            </div>
+            <nav class="hidden md:flex gap-8 text-sm font-sans font-bold text-brand-900 dark:text-brand-200 uppercase tracking-wider text-xs">
+                <a href="#problema" class="hover:text-brand-500 dark:hover:text-brand-400 transition-colors">O Problema</a>
+                <a href="#conceito" class="hover:text-brand-500 dark:hover:text-brand-400 transition-colors">K-Means</a>
+                <a href="#pratica" class="hover:text-brand-500 dark:hover:text-brand-400 transition-colors">Prática</a>
+            </nav>
+            <div class="flex items-center gap-4">
+                <button id="theme-toggle" class="text-brand-400 hover:text-brand-700 dark:text-ink-400 dark:hover:text-brand-300 transition-colors bg-brand-50 dark:bg-ink-900 p-2 rounded-full" aria-label="Alternar Modo Escuro">
+                    <i data-lucide="moon" class="w-5 h-5 dark:hidden"></i>
+                    <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+                </button>
+                <a href="https://github.com" target="_blank" class="text-brand-400 hover:text-brand-700 dark:text-ink-400 dark:hover:text-brand-300 transition-colors bg-brand-50 dark:bg-ink-900 p-2 rounded-full">
+                    <svg viewBox="0 0 24 24" class="w-5 h-5 fill-current" aria-hidden="true">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+        <div class="h-[3px] w-full bg-brand-50 dark:bg-ink-900 transition-colors duration-300">
+            <div id="progress-bar" class="h-full bg-brand-600 dark:bg-brand-500 w-full" style="transform: scaleX(0);"></div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-12 md:py-20">
+        
+        <!-- Hero Header -->
+        <header class="mb-16 md:mb-20 max-w-4xl">
+
+            
+            <h1 class="font-serif text-5xl md:text-7xl font-bold leading-[1.05] text-brand-950 dark:text-ink-50 mb-6 tracking-tight">
+                Aprendizado Não Supervisionado.
+            </h1>
+            
+            <p class="text-xl md:text-2xl text-ink-600 dark:text-ink-300 font-serif italic mb-10 max-w-3xl leading-relaxed">
+                Como vamos ensinar os algoritmos a encontrar estruturas e significados ocultos em dados sem fornecer as respostas prontas.
+            </p>
+            
+            <!-- Authors Opening (Com fotos e nomes) -->
+            <div class="py-6 border-y border-brand-100 dark:border-ink-800 mt-12 bg-white dark:bg-ink-900/50 rounded-xl p-6 shadow-sm border border-brand-50 dark:border-ink-800 transition-colors duration-300">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 text-sm">
+                    <div class="flex items-center gap-3">
+                        <img src="https://github.com/jeanBR2O2O.png" alt="Foto de Jean Carlos" class="w-12 h-12 rounded-full object-cover border-2 border-brand-100 dark:border-brand-800" onerror="this.src='https://placehold.co/150x150/eff6ff/1e3a8a?text=JC'">
+                        <div>
+                            <span class="block text-brand-500 dark:text-brand-400 mb-0.5 font-mono text-[10px] uppercase font-bold">Autor</span>
+                            <span class="font-semibold text-brand-900 dark:text-brand-100">Jean Carlos</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <img src="https://github.com/jonnguii.png" alt="Foto de João Guilherme" class="w-12 h-12 rounded-full object-cover border-2 border-brand-100 dark:border-brand-800" onerror="this.src='https://placehold.co/150x150/eff6ff/1e3a8a?text=JG'">
+                        <div>
+                            <span class="block text-brand-500 dark:text-brand-400 mb-0.5 font-mono text-[10px] uppercase font-bold">Autor</span>
+                            <span class="font-semibold text-brand-900 dark:text-brand-100">João Guilherme</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <img src="https://github.com/SAMUKISZHSD.png" alt="Foto de Samuel" class="w-12 h-12 rounded-full object-cover border-2 border-brand-100 dark:border-brand-800" onerror="this.src='https://placehold.co/150x150/eff6ff/1e3a8a?text=S'">
+                        <div>
+                            <span class="block text-brand-500 dark:text-brand-400 mb-0.5 font-mono text-[10px] uppercase font-bold">Autor</span>
+                            <span class="font-semibold text-brand-900 dark:text-brand-100">Samuel</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 md:border-l md:border-brand-100 dark:md:border-brand-900 md:pl-6 transition-colors duration-300">
+                        <div class="w-12 h-12 rounded-full bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 flex items-center justify-center transition-colors">
+                            <i data-lucide="calendar" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <span class="block text-brand-500 dark:text-brand-400 mb-0.5 font-mono text-[10px] uppercase font-bold">Publicação</span>
+                            <span class="font-semibold text-brand-900 dark:text-brand-100">Outubro 2026</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="editorial-grid">
+            <!-- Main Content -->
+            <article class="article-content max-w-3xl">
+                
+                <section id="problema">
+                    <p class="drop-cap">
+                        Imagine que recebemos um banco de dados com o histórico de navegação de 100.000 usuários ativos de um e-commerce. Nosso objetivo é construir e lançar campanhas de marketing ultra personalizadas. Existe, porém, um problema crítico: não temos metadados ou rótulos informando quem é o cliente "Frequente", "Casual" ou "Em Churn". O que temos em mãos é apenas o rastro digital bruto - cliques, valores de compras, e o tempo gasto em cada página.
+                    </p>
+                    <p>
+                        Se estivéssemos operando sob os domínios clássicos de <em>Aprendizado Supervisionado</em>, treinaríamos nossos algoritmos utilizando variáveis-alvo explícitas (<em>labels</em>). Contudo, quando o gabarito inexiste, como é o nosso caso, não podemos forçar regras. Dependemos inteiramente do maquinário matemático para nos ajudar a revelar os agrupamentos que residem naturalmente no conjunto de dados.
+                    </p>
+                </section>
+
+                <section id="conceito">
+                    <h2>Estrutura no Caos</h2>
+                    <p>
+                        Neste cenário, utilizamos o <strong>Aprendizado de Máquina Não Supervisionado</strong> (<em>Unsupervised Learning</em>). Ele caracteriza-se pela exploração autônoma de distribuições de dados não rotulados. Nós não avaliamos e não otimizamos o modelo em relação a um gabarito de resposta humana; em vez disso, programamos o algoritmo para otimizar métricas puras de similaridade ou dispersão interna.
+                    </p>
+                    
+                    <h3>Aplicações Fundamentais</h3>
+                    <ul>
+                        <li><strong>Agrupamento (Clustering):</strong> Vamos segmentar nossa base de clientes, agrupar categorias de documentos automaticamente ou até mesmo mapear anomalias genéticas.</li>
+                        <li><strong>Redução de Dimensionalidade:</strong> Vamos comprimir atributos complexos preservando a variação dos dados (ex: PCA), essencial se quisermos transformar 100 variáveis numéricas complexas em apenas duas para visualizar em um gráfico.</li>
+                        <li><strong>Detecção de Anomalias:</strong> Protegeremos sistemas contra fraudes financeiras ao treinar o modelo para detectar transações financeiras que orbitam longe de qualquer núcleo confiável.</li>
+                    </ul>
+
+                    <!-- Data Viz Simulation -->
+                    <figure class="my-16">
+                        <div class="viz-container">
+                            <div class="viz-header flex flex-col sm:flex-row sm:justify-between sm:items-end p-6 pb-4">
+                                <div>
+                                    <h4 class="font-sans font-bold text-sm text-brand-900 dark:text-brand-100 uppercase tracking-widest">Simulação Espacial</h4>
+                                    <p class="text-xs text-brand-600 dark:text-brand-400 font-mono mt-1 font-medium">Convergência de vetores via minimização de inércia.</p>
+                                </div>
+                                <div class="flex gap-2 mt-4 sm:mt-0">
+                                    <button id="btn-scatter" class="px-4 py-2 text-xs font-mono font-bold text-white bg-brand-600 dark:bg-brand-700 border border-brand-600 dark:border-brand-700 rounded-md hover:bg-brand-700 dark:hover:bg-brand-600 transition-colors shadow-sm">Estado Bruto</button>
+                                    <button id="btn-cluster" class="px-4 py-2 text-xs font-mono font-bold text-brand-700 dark:text-brand-300 bg-white dark:bg-ink-950 border border-brand-200 dark:border-brand-800 rounded-md hover:bg-brand-50 dark:hover:bg-ink-900 hover:text-brand-900 dark:hover:text-brand-100 transition-colors">Agrupar (K=3)</button>
+                                </div>
+                            </div>
+                            <div class="relative w-full aspect-[2/1] bg-white dark:bg-ink-950 overflow-hidden border-t border-brand-100 dark:border-ink-900 transition-colors">
+                                <svg id="cluster-svg" viewBox="0 0 600 300" class="w-full h-full">
+                                    <g class="viz-grid">
+                                        <line x1="0" y1="50" x2="600" y2="50"></line>
+                                        <line x1="0" y1="100" x2="600" y2="100"></line>
+                                        <line x1="0" y1="150" x2="600" y2="150"></line>
+                                        <line x1="0" y1="200" x2="600" y2="200"></line>
+                                        <line x1="0" y1="250" x2="600" y2="250"></line>
+                                        
+                                        <line x1="100" y1="0" x2="100" y2="300"></line>
+                                        <line x1="200" y1="0" x2="200" y2="300"></line>
+                                        <line x1="300" y1="0" x2="300" y2="300"></line>
+                                        <line x1="400" y1="0" x2="400" y2="300"></line>
+                                        <line x1="500" y1="0" x2="500" y2="300"></line>
+                                    </g>
+                                    <g id="dots-container"></g>
+                                </svg>
+                            </div>
+                        </div>
+                        <figcaption class="mt-4 text-sm text-ink-600 dark:text-ink-400 border-l-[3px] border-brand-300 dark:border-brand-700 pl-4 font-serif italic transition-colors">
+                            <strong>Figura 1.</strong> Interaja com a simulação: os pontos (observações) distribuídos aleatoriamente convergem iterativamente para seus respectivos centroides.
+                        </figcaption>
+                    </figure>
+                </section>
+
+                <section id="algoritmo">
+                    <h2>A Matemática do K-Means</h2>
+                    <p>
+                        Para resolvermos nosso problema, vamos usar o modelo mais representativo de particionamento: o algoritmo <strong>K-Means</strong>. Sua heurística baseia-se na realocação iterativa com o foco exclusivo de minimizar a variância intra-cluster (a Inércia).
+                    </p>
+                    <p>Vamos estruturar nosso ciclo computacional em quatro etapas determinísticas:</p>
+                    
+                    <ol>
+                        <li><strong>Inicialização:</strong> Começamos definindo <em>K</em> vetores centroides posicionados aleatoriamente no espaço.</li>
+                        <li><strong>Atribuição:</strong> Calculamos a distância euclidiana de cada observação em relação a esses centroides. Associamos o cliente ao centroide mais próximo.</li>
+                        <li><strong>Atualização:</strong> Recalculamos as coordenadas, deslocando cada centroide exatemente para o vetor médio geográfico dos clientes recém-associados a ele.</li>
+                        <li><strong>Convergência:</strong> Repetimos exaustivamente os passos de atribuição e atualização até que os centroides simplesmente parem de se mover.</li>
+                    </ol>
+
+                    <div class="formula-box">
+                        J = ∑<sub>j=1</sub><sup>k</sup> ∑<sub>i=1</sub><sup>n</sup> || x<sub>i</sub> - μ<sub>j</sub> ||<sup>2</sup>
+                    </div>
+                    <p class="text-sm text-ink-600 dark:text-ink-400 mt-2 mb-8 font-serif">
+                        Na fórmula, nossa função objetivo (Inércia) garante que minimizaremos a distância (ao quadrado) entre o nosso vetor de dados do usuário <span class="font-mono text-brand-700 dark:text-brand-300 bg-brand-100 dark:bg-brand-950 px-1 font-bold rounded">x<sub>i</sub></span> e o centro do grupo correspondente <span class="font-mono text-brand-700 dark:text-brand-300 bg-brand-100 dark:bg-brand-950 px-1 font-bold rounded">μ<sub>j</sub></span>.
+                    </p>
+                </section>
+
+                <section id="pratica">
+                    <h2>Implementação Python</h2>
+                    <p>
+                        Na prática, podemos validar nossos dados e treinar o modelo rapidamente utilizando a biblioteca <code>scikit-learn</code> no Python. O fluxo de código abaixo simula a extração matemática para criarmos nossas 4 campanhas de marketing diferentes.
+                    </p>
+                    
+<pre><code class="language-python">import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.datasets import make_blobs
+
+# 1. Geração da nossa base de clientes (300 clientes simulados, 4 perfis)
+X, _ = make_blobs(n_samples=300, centers=4, cluster_std=0.60, random_state=0)
+
+# 2. Vamos instanciar nosso algoritmo
+kmeans = KMeans(n_clusters=4, n_init='auto', random_state=42)
+
+# 3. Fit: o algoritmo converge iterativamente sobre nossos dados cruz
+kmeans.fit(X)
+
+# 4. Extração dos perfis finais para uso pelo marketing
+perfis_identificados = kmeans.labels_
+centroides = kmeans.cluster_centers_
+
+# (Opcional) Visualização com Matplotlib
+plt.scatter(X[:, 0], X[:, 1], c=perfis_identificados, cmap='viridis', alpha=0.6)
+plt.scatter(centroides[:, 0], centroides[:, 1], c='black', marker='x', s=100)
+plt.title("Perfis de Clientes via K-Means")
+plt.show()</code></pre>
+                </section>
+
+                <section>
+                    <h2>Limitações e Armadilhas</h2>
+                    <p>
+                        Devemos ter muito cuidado: a ausência de um gabarito exige extremo rigor na fase de pré-processamento. O modelo absorverá ruído se não definirmos limites claros. Duas armadilhas são clássicas:
+                    </p>
+                    
+                    <h3>A Determinação da Dimensionalidade (K)</h3>
+                    <p>
+                        No algoritmo puro, precisamos definir o parâmetro escalar <em>K</em> a priori. Se errarmos, e definirmos <span class="font-mono bg-brand-50 dark:bg-brand-950 px-1 text-brand-700 dark:text-brand-300 rounded text-sm">K=10</span> para clientes que naturalmente só se dividem em dois grupos, o algoritmo forçará cortes irreais e matemáticos em agrupamentos que não possuem nenhum significado de negócios. Para mitigar, costumamos aplicar o Método do Cotovelo (<em>Elbow Method</em>).
+                    </p>
+                    
+                    <h3>Sensibilidade à Escala</h3>
+                    <p>
+                        Nossa dependência matemática da distância geométrica torna o modelo cego perante escalas. Se usarmos a variável <em>Idade</em> (20 a 80) em conjunto com o <em>Gasto Mensal</em> (de 1.000 a 50.000), a matemática do modelo fará a distância da renda dominar todo o processo. Precisamos obrigatoriamente padronizar a escala de nossos dados numéricos através de <code>StandardScaler</code> antes do treinamento.
+                    </p>
+                </section>
+                
+
+                <!-- References -->
+                <section class="mt-16 pt-10 border-t border-ink-200 dark:border-ink-800 transition-colors">
+                    <h3 class="!mt-0 mb-6 font-bold text-xl text-brand-900 dark:text-brand-100 border-b border-brand-50 dark:border-brand-900 pb-4">Referências de Estudo</h3>
+                    <ul class="text-sm font-sans space-y-4">
+                        <li class="pl-0 before:hidden flex gap-3">
+                            <i data-lucide="link" class="w-5 h-5 text-brand-400 dark:text-brand-500 flex-shrink-0 mt-0.5"></i>
+                            <div>
+                                <a href="https://scikit-learn.org/stable/modules/clustering.html" target="_blank" class="text-brand-700 dark:text-brand-400 font-bold hover:text-brand-900 dark:hover:text-brand-200 hover:underline underline-offset-4 block mb-1">Guia Oficial do Scikit-Learn: Clustering Algorithms</a>
+                                <span class="text-ink-600 dark:text-ink-400">A documentação técnica primária. Explica detalhadamente como o K-Means e outros algoritmos funcionam sob o capô da principal biblioteca de Python.</span>
+                            </div>
+                        </li>
+                        <li class="pl-0 before:hidden flex gap-3">
+                            <i data-lucide="link" class="w-5 h-5 text-brand-400 dark:text-brand-500 flex-shrink-0 mt-0.5"></i>
+                            <div>
+                                <a href="https://mlu-explain.github.io/" target="_blank" class="text-brand-700 dark:text-brand-400 font-bold hover:text-brand-900 dark:hover:text-brand-200 hover:underline underline-offset-4 block mb-1">Machine Learning University: Visual Explanations</a>
+                                <span class="text-ink-600 dark:text-ink-400">Uma excelente referência interativa com artigos visuais patrocinados que facilitam a construção da intuição matemática para estudantes de tecnologia.</span>
+                            </div>
+                        </li>
+                        <li class="pl-0 before:hidden flex gap-3">
+                            <i data-lucide="link" class="w-5 h-5 text-brand-400 dark:text-brand-500 flex-shrink-0 mt-0.5"></i>
+                            <div>
+                                <a href="https://developers.google.com/machine-learning/crash-course" target="_blank" class="text-brand-700 dark:text-brand-400 font-bold hover:text-brand-900 dark:hover:text-brand-200 hover:underline underline-offset-4 block mb-1">Google Machine Learning Crash Course</a>
+                                <span class="text-ink-600 dark:text-ink-400">Curso intensivo gratuito fornecido pelos engenheiros do Google. Ideal para preencher eventuais defasagens em álgebra ou fundamentos estatísticos.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </section>
+            </article>
+
+            <!-- Desktop Sidebar Table of Contents -->
+            <aside class="sidebar hidden lg:block border-l-2 border-brand-100 dark:border-brand-900 pl-8 h-fit transition-colors">
+                <h4 class="font-sans font-bold text-xs uppercase tracking-widest text-brand-900 dark:text-brand-200 mb-6 bg-brand-50 dark:bg-brand-950 inline-block px-3 py-1 rounded">Índice da Aula</h4>
+                <nav class="flex flex-col gap-4 text-sm font-sans font-semibold text-ink-600 dark:text-ink-400">
+                    <a href="#problema" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">O Problema e a Falta de Rótulos</a>
+                    <a href="#conceito" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">A Estrutura no Caos</a>
+                    <a href="#algoritmo" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Matemática do K-Means</a>
+                    <a href="#pratica" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Execução de Código em Python</a>
+
+                </nav>
+            </aside>
+        </div>
+    </main>
+
+    <footer class="bg-brand-950 text-brand-200 py-12 font-sans text-sm mt-20">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+            <div>
+                <div class="font-serif font-bold text-base text-white tracking-wide mb-2 flex items-center gap-2">
+                    <i data-lucide="layers" class="w-5 h-5 text-brand-400"></i>
+                    TECHBLOG
+                </div>
+                <p class="max-w-md text-brand-300">Documento de artigo técnico desenvolvido para avaliação acadêmica e explicação didática.</p>
+            </div>
+            
+            <div class="flex flex-col items-start md:items-end gap-2">
+                <a href="#" class="text-white hover:text-brand-400 font-bold transition-colors flex items-center gap-2">
+                    <i data-lucide="github" class="w-4 h-4"></i>
+                    Acessar Repositório
+                </a>
+                <p>&copy; 2026 TechBlog. Licença MIT.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Icons
+        lucide.createIcons();
+
+        // Dark Mode Toggle
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        themeToggleBtn.addEventListener('click', () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        });
+
+        // Reading Progress
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height);
+            document.getElementById('progress-bar').style.transform = `scaleX(${scrolled})`;
+        });
+
+        // Visualization Script
+        (function() {
+            const svg = document.getElementById('dots-container');
+            if (!svg) return;
+
+            const numDots = 150;
+            const dots = [];
+            
+            // 3 Academic cluster colors aligned with brand colors
+            const centers = [
+                { x: 150, y: 100, color: '#2563eb' }, // Brand blue
+                { x: 450, y: 80, color: '#8b5cf6' },  // Violet
+                { x: 300, y: 220, color: '#ec4899' }  // Pink
+            ];
+
+            for (let i = 0; i < numDots; i++) {
+                const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                
+                // Uniformly scattered state
+                const startX = 50 + Math.random() * 500;
+                const startY = 20 + Math.random() * 260;
+                
+                // Clustered state
+                const clusterIndex = i % 3;
+                const center = centers[clusterIndex];
+                
+                // Normal-ish distribution around center
+                const spreadX = (Math.random() + Math.random() + Math.random() - 1.5) * 80;
+                const spreadY = (Math.random() + Math.random() + Math.random() - 1.5) * 80;
+                
+                const targetX = Math.max(20, Math.min(580, center.x + spreadX));
+                const targetY = Math.max(20, Math.min(280, center.y + spreadY));
+
+                dot.setAttribute('cx', startX);
+                dot.setAttribute('cy', startY);
+                dot.setAttribute('r', '3.5');
+                
+                // Use a neutral color for unclustered state that works in both light/dark
+                dot.setAttribute('fill', '#94a3b8'); // Slate 400
+                dot.setAttribute('class', 'cluster-dot');
+                dot.style.opacity = '0.8';
+                
+                svg.appendChild(dot);
+                
+                dots.push({
+                    element: dot,
+                    scattered: { x: startX, y: startY },
+                    clustered: { x: targetX, y: targetY, color: center.color }
+                });
+            }
+
+            const btnScatter = document.getElementById('btn-scatter');
+            const btnCluster = document.getElementById('btn-cluster');
+            
+            const activeClass = "px-4 py-2 text-xs font-mono font-bold text-white bg-brand-600 dark:bg-brand-700 border border-brand-600 dark:border-brand-700 rounded-md hover:bg-brand-700 dark:hover:bg-brand-600 transition-colors shadow-sm";
+            const inactiveClass = "px-4 py-2 text-xs font-mono font-bold text-brand-700 dark:text-brand-300 bg-white dark:bg-ink-950 border border-brand-200 dark:border-brand-800 rounded-md hover:bg-brand-50 dark:hover:bg-ink-900 hover:text-brand-900 dark:hover:text-brand-100 transition-colors";
+
+            function setActive(activeBtn, inactiveBtn) {
+                activeBtn.className = activeClass;
+                inactiveBtn.className = inactiveClass;
+            }
+
+            btnScatter.addEventListener('click', () => {
+                setActive(btnScatter, btnCluster);
+                dots.forEach(d => {
+                    d.element.setAttribute('cx', d.scattered.x);
+                    d.element.setAttribute('cy', d.scattered.y);
+                    d.element.setAttribute('fill', '#94a3b8');
+                });
+            });
+
+            btnCluster.addEventListener('click', () => {
+                setActive(btnCluster, btnScatter);
+                dots.forEach(d => {
+                    d.element.setAttribute('cx', d.clustered.x);
+                    d.element.setAttribute('cy', d.clustered.y);
+                    d.element.setAttribute('fill', d.clustered.color);
+                });
+            });
+        })();
+    </script>
+</body>
+</html>
