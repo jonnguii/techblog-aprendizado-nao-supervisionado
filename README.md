@@ -1,4 +1,4 @@
-# TechBlog — Aprendizado Não Supervisionado
+# TechBlog - Aprendizado Não Supervisionado
 
 Projeto de blog técnico sobre aprendizado não supervisionado, com foco no algoritmo K-Means e na explicação visual de conceitos de clustering, similaridade e segmentação de dados.
 
@@ -31,9 +31,9 @@ A referência principal do conteúdo foi o notebook `apresentacao_kmeans_final.i
 
 ### 2) Três decisões técnicas e de design adotadas
 
-- Vamos adotar uma estrutura de blog técnico em múltiplas seções porque o conteúdo precisa ser lido em sequência, com introdução, explicação conceitual, exemplo prático e conclusão.
-- Vamos usar Tailwind CSS e estilos minificados porque isso permite uma interface moderna, consistente e mais leve, com melhor manutenção e desempenho de carregamento.
-- Vamos aplicar lazy-loading de imagens e defer em scripts porque o site precisa carregar de forma mais eficiente, preservando a experiência do usuário e reduzindo o impacto na renderização inicial.
+- Adotamos uma estrutura de blog técnico em múltiplas seções porque o conteúdo precisa ser lido em sequência, com introdução, explicação conceitual, exemplo prático e conclusão.
+- Usamos Tailwind CSS e estilos minificados porque isso permite uma interface moderna, consistente e mais leve, com melhor manutenção e desempenho de carregamento.
+- Decidimos utilizar uma linguagem menos tecnica e mais parecida com o que usamos no cotidiano. Dessa forma, todo o público-alvo é capaz de entender os conceitos apresentados.
 
 ### 3) Uma decisão que não foi adotada
 
